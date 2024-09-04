@@ -146,6 +146,3 @@ To upload these images to your GitHub repository, follow these steps:
      ![Power Apps Create Screen](images/image1.png)
      ```
 
----
-
-You can take screenshots at each step using the descriptions provided, then add them to your GitHub documentation following the instructions above.
