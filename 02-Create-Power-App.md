@@ -25,8 +25,8 @@
    - Click **Add data** and search for SharePoint.
    - Select **SharePoint** and then connect to your SharePoint list.
 
-   ![Add Data Source](link_to_image_3)  
-   *(Screenshot showing the "Data" panel and the "Add data" option with SharePoint selected.)*
+![image](https://github.com/user-attachments/assets/1bfd1da4-fb67-4e3e-99d0-c10b84e058a9)
+
 
 #### **Step 3: Add Drop-down Controls**
 1. **Insert Drop-downs:**
@@ -37,8 +37,10 @@
      - `ddlIssue`
      - `ddlError`
 
-   ![Insert Dropdowns](link_to_image_4)  
-   *(Screenshot showing the insertion of dropdown controls and renaming them.)*
+![image](https://github.com/user-attachments/assets/128f0bad-bdf2-4300-a393-0089236b4057)
+
+
+### **Note:- If you want Searchable drop down select the Combo Box**
 
 #### **Step 4: Set Up Drop-downs**
 1. **Product Drop-down (`ddlProduct`):**
@@ -48,8 +50,8 @@
      ```
    - Enable **Allow Search** from the dropdown’s properties panel.
 
-   ![Product Drop-down Setup](link_to_image_5)  
-   *(Screenshot showing the configuration of `ddlProduct` with the Items property and Allow Search enabled.)*
+![image](https://github.com/user-attachments/assets/1b3804fd-0062-4b0f-8328-344d86451926)
+
 
 2. **Issue Drop-down (`ddlIssue`):**
    - Set the **Items** property to:
@@ -62,8 +64,8 @@
      !IsBlank(ddlProduct.Selected.Value)
      ```
 
-   ![Issue Drop-down Setup](link_to_image_6)  
-   *(Screenshot showing the configuration of `ddlIssue` with the Items and Visible properties.)*
+![image](https://github.com/user-attachments/assets/0d756b6e-8fa6-45fd-935b-b2be484caa22)
+
 
 3. **Error Drop-down (`ddlError`):**
    - Set the **Items** property to:
