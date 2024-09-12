@@ -53,8 +53,4 @@ SubmitForm(Form1)
 
 ---
 
-This enhancement improves the user experience by allowing seamless navigation between screens and the ability to update the Title Maker data directly within the app, integrating with SharePoint for real-time updates.
-
-**Next Steps:**  
-Once you've completed these steps, push the changes to your GitHub repository for version control and documentation.
 
