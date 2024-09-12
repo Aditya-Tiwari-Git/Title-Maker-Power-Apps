@@ -39,4 +39,22 @@ This enhancement allows the user to navigate from the main screen to a second sc
    - **Step 4:** Verify the updates in your SharePoint list to ensure the data is being saved correctly.
 
 ---
+### **Code Snippets:**
+```PowerApps
+// OnSelect of the Button on the first screen
+Navigate(Screen2)
+
+// Form Item Property to load the selected item for editing
+LookUp(YourSharePointList, ID = SelectedID)
+
+// Submit Button to save data back to SharePoint
+SubmitForm(Form1)
+```
+
+---
+
+This enhancement improves the user experience by allowing seamless navigation between screens and the ability to update the Title Maker data directly within the app, integrating with SharePoint for real-time updates.
+
+**Next Steps:**  
+Once you've completed these steps, push the changes to your GitHub repository for version control and documentation.
 
