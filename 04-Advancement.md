@@ -58,6 +58,15 @@ To implement the new functionality for creating and approving custom titles, fol
    - Step 2: Add relevant columns such as `TitleName`, `CreatedBy`, `Status`, etc.
    - Step 3: Set default status as "Pending" for new titles.
 
+2. **Add a Form for Custom Title Submission in Power Apps**
+   - Step 1: In your Power Apps project, on the second screen (`Screen2`), go to **Insert > Forms > Edit Form** to add a new form.
+   - Step 2: In the form's **Properties pane**, set the **Data Source** to `CustomTitleList`.
+   - Step 3: Select the fields you want users to fill, such as `TitleName` and `CreatedBy`.
+   - Step 4: Add a button labeled "Submit Custom Title" and set its **OnSelect** property to:
+     ```PowerApps
+     SubmitForm(CustomTitleForm)
+     ```
+
 
 ---
 
