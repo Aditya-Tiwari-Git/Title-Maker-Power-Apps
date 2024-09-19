@@ -50,7 +50,6 @@ LookUp(YourSharePointList, ID = SelectedID)
 // Submit Button to save data back to SharePoint
 SubmitForm(Form1)
 ```
-To implement the new functionality for creating and approving custom titles, follow these steps:
 
 ### Enhancement: Add Custom Title Creation with Approval Process
 1. **Create a New SharePoint List for Custom Titles**
@@ -84,7 +83,20 @@ To implement the new functionality for creating and approving custom titles, fol
      ```
    - Step 3: On **CustomTitleScreen**, place the custom title form and the "Submit Custom Title" button.
 
+5. **Add Navigation Buttons on Other Screens**
+   - Step 1: Go to the main screen and second screen, and add buttons that allow users to navigate to the new custom title screen.
+   - Step 2: Set their **OnSelect** properties to:
+     ```PowerApps
+     Navigate(CustomTitleScreen)
+     ```
 
+### Summary of Steps
+- **Create** a `CustomTitleList` in SharePoint.
+- **Add** a form for users to submit custom titles.
+- **Set up** Power Automate to start an approval flow when a title is submitted.
+- **Add navigation** to the new custom title screen from other screens.
+
+This setup will allow users to submit custom titles, which will only be added to the main data upon approval.
 
 ---
 
