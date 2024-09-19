@@ -51,52 +51,126 @@ LookUp(YourSharePointList, ID = SelectedID)
 SubmitForm(Form1)
 ```
 
-### Enhancement: Add Custom Title Creation with Approval Process
-1. **Create a New SharePoint List for Custom Titles**
-   - Step 1: Go to your SharePoint site and create a new list called `CustomTitleList`.
-   - Step 2: Add relevant columns such as `TitleName`, `CreatedBy`, `Status`, etc.
-   - Step 3: Set default status as "Pending" for new titles.
+Here are the **detailed steps** to build the custom title approval functionality in Power Apps and Power Automate, including all aspects of the process.
 
-2. **Add a Form for Custom Title Submission in Power Apps**
-   - Step 1: In your Power Apps project, on the second screen (`Screen2`), go to **Insert > Forms > Edit Form** to add a new form.
-   - Step 2: In the form's **Properties pane**, set the **Data Source** to `CustomTitleList`.
-   - Step 3: Select the fields you want users to fill, such as `TitleName` and `CreatedBy`.
-   - Step 4: Add a button labeled "Submit Custom Title" and set its **OnSelect** property to:
+---
+
+### **Part 1: Power Apps Configuration**
+
+#### **1.1. Create a Custom Title SharePoint List**
+1. **Go to SharePoint** and create a new list called `CustomTitleList`.
+2. **Add columns**:
+   - `TitleName` (Single line of text): To store the title name.
+   - `CreatedBy` (Person or Group): To capture the name of the user who created the title.
+   - `Status` (Choice): Set choices as **Pending**, **Approved**, and **Rejected**. Set the default to **Pending**.
+
+#### **1.2. Add a Custom Title Submission Form in Power Apps**
+1. **Open Power Apps Studio** and load your existing Title Maker app.
+2. **Create a new screen** (let’s call it `CustomTitleScreen`):
+   - In the left navigation pane, click **Insert > New Screen**.
+   - Name this screen `CustomTitleScreen`.
+3. **Add an Edit Form** to the new screen:
+   - Go to **Insert > Forms > Edit Form**.
+   - Set the **Data Source** to `CustomTitleList` (the SharePoint list you just created).
+   - In the **Fields** section, select `TitleName` and `CreatedBy` for the user to fill.
+4. **Add a Submit Button**:
+   - Insert a button below the form, and set its **Text** property to `Submit Custom Title`.
+   - Set its **OnSelect** property to:
      ```PowerApps
      SubmitForm(CustomTitleForm)
      ```
-3. **Set Up Power Automate for Title Approval**
-   - Step 1: Open **Power Automate** and create a new flow that triggers when a new item is created in the `CustomTitleList`.
-   - Step 2: Add the action **Start and Wait for Approval**.
-     - Title: "Approve new title: [TitleName]"
-     - Assignees: Specify the approver(s).
-     - Approval Type: Approve/Reject – First to respond.
-   - Step 3: Add a conditional action to check if the title is approved.
-     - If approved, create a new item in the main SharePoint list (`TitleMakerList`).
-     - If rejected, update the `Status` field in `CustomTitleList` to "Rejected".
+   - Replace `CustomTitleForm` with the actual name of the form.
+   - This button will save the custom title data to the `CustomTitleList` in SharePoint.
 
-4. **Display the Custom Title Form on a New Screen**
-   - Step 1: On **Screen2**, create a new button labeled "Create Custom Title".
-   - Step 2: Set its **OnSelect** property to:
+#### **1.3. Add Navigation Buttons**
+1. **Add a Button** on your **Main Screen** and the **Update Title Screen**:
+   - Set its **Text** property to `Create Custom Title`.
+   - Set its **OnSelect** property to:
      ```PowerApps
      Navigate(CustomTitleScreen)
      ```
-   - Step 3: On **CustomTitleScreen**, place the custom title form and the "Submit Custom Title" button.
+   - This will navigate the user to the screen where they can submit custom titles.
 
-5. **Add Navigation Buttons on Other Screens**
-   - Step 1: Go to the main screen and second screen, and add buttons that allow users to navigate to the new custom title screen.
-   - Step 2: Set their **OnSelect** properties to:
-     ```PowerApps
-     Navigate(CustomTitleScreen)
+---
+
+### **Part 2: Power Automate Flow Configuration**
+
+#### **2.1. Create a New Flow for Title Approval**
+1. **Open Power Automate** and click on **Create > Automated Flow**.
+2. **Select a Trigger**:
+   - Search for "SharePoint" in the trigger search box.
+   - Choose **When an item is created**.
+   - Set the **Site Address** to your SharePoint site and the **List Name** to `CustomTitleList`.
+
+#### **2.2. Add Approval Action**
+1. **Add a new action**:
+   - Click on **New Step** and search for "Approval".
+   - Select **Start and wait for an approval**.
+2. **Configure the approval**:
+   - **Approval Type**: Select **Approve/Reject – First to respond**.
+   - **Title**: Set the title of the approval to something like:
+     ```PowerAutomate
+     Approval request for title: @{triggerOutputs()?['body/TitleName']}
+     ```
+   - **Assign to**: Enter the email(s) of the approver(s).
+   - **Details**: Include details such as the created title and creator:
+     ```PowerAutomate
+     A new custom title was created by: @{triggerOutputs()?['body/CreatedBy/DisplayName']}. Title: @{triggerOutputs()?['body/TitleName']}
      ```
 
-### Summary of Steps
-- **Create** a `CustomTitleList` in SharePoint.
-- **Add** a form for users to submit custom titles.
-- **Set up** Power Automate to start an approval flow when a title is submitted.
-- **Add navigation** to the new custom title screen from other screens.
+#### **2.3. Add a Condition for Approval Outcome**
+1. **Add a condition**:
+   - Click **New Step** and choose **Condition**.
+   - In the condition box, set the logic:
+     - **If outcome of approval is equal to Approve**:
+       ```PowerAutomate
+       outputs('Start_and_wait_for_an_approval')?['body/outcome']
+       ```
+   - In the **If Yes** branch, add actions for approved titles.
+   
+#### **2.4. Action for Approved Titles**
+1. **Create a new item** in the main Title Maker list:
+   - Add a **SharePoint - Create Item** action.
+   - Set the **Site Address** to your SharePoint site and **List Name** to your main `TitleMakerList`.
+   - Map the fields:
+     - **TitleName**: Set to `TitleName` from the `CustomTitleList`.
+     - **CreatedBy**: Set to the value from the custom title item.
+   
+2. **Update the original item** in the `CustomTitleList` to reflect the status:
+   - Add another **SharePoint - Update Item** action.
+   - Set the **ID** to `ID` from the `CustomTitleList`.
+   - Set **Status** to **Approved**.
 
-This setup will allow users to submit custom titles, which will only be added to the main data upon approval.
+#### **2.5. Action for Rejected Titles**
+1. In the **If No** branch of the condition, add an **Update Item** action:
+   - Set **Status** to **Rejected** for rejected titles.
+
+---
+
+### **Part 3: Complete Testing and Deployment**
+
+#### **3.1. Test Power Apps**
+1. **Preview your app**:
+   - Click **Preview** and try navigating between screens using the buttons.
+   - Test the custom title submission by filling out the form and clicking the `Submit` button.
+   - Ensure that the title is submitted to the `CustomTitleList` in SharePoint.
+
+#### **3.2. Test Power Automate**
+1. **Submit a new custom title**:
+   - After submitting a title in Power Apps, check your Power Automate flow.
+   - Ensure that the approval request is sent, and test both the **Approve** and **Reject** paths.
+   - After approval, verify that the title is added to the main `TitleMakerList` and the status is updated to **Approved** in the `CustomTitleList`.
+
+#### **3.3. Finalize**
+1. Once all tests are successful, deploy your updated Power Apps and Power Automate flow to production.
+
+---
+
+### **Summary of Steps**
+- **In Power Apps**: Create a new screen with a form to submit custom titles. Add navigation buttons on other screens to direct users to this form.
+- **In Power Automate**: Create a flow that starts the approval process when a new item is created in the `CustomTitleList`. Based on the approval outcome, update the item or move it to the main `TitleMakerList`.
+
+This solution ensures that only approved custom titles are added to the main data, providing a controlled flow for title creation.
 
 ---
 
