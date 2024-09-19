@@ -66,6 +66,24 @@ To implement the new functionality for creating and approving custom titles, fol
      ```PowerApps
      SubmitForm(CustomTitleForm)
      ```
+3. **Set Up Power Automate for Title Approval**
+   - Step 1: Open **Power Automate** and create a new flow that triggers when a new item is created in the `CustomTitleList`.
+   - Step 2: Add the action **Start and Wait for Approval**.
+     - Title: "Approve new title: [TitleName]"
+     - Assignees: Specify the approver(s).
+     - Approval Type: Approve/Reject – First to respond.
+   - Step 3: Add a conditional action to check if the title is approved.
+     - If approved, create a new item in the main SharePoint list (`TitleMakerList`).
+     - If rejected, update the `Status` field in `CustomTitleList` to "Rejected".
+
+4. **Display the Custom Title Form on a New Screen**
+   - Step 1: On **Screen2**, create a new button labeled "Create Custom Title".
+   - Step 2: Set its **OnSelect** property to:
+     ```PowerApps
+     Navigate(CustomTitleScreen)
+     ```
+   - Step 3: On **CustomTitleScreen**, place the custom title form and the "Submit Custom Title" button.
+
 
 
 ---
