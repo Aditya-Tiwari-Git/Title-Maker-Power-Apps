@@ -50,6 +50,14 @@ LookUp(YourSharePointList, ID = SelectedID)
 // Submit Button to save data back to SharePoint
 SubmitForm(Form1)
 ```
+To implement the new functionality for creating and approving custom titles, follow these steps:
+
+### Enhancement: Add Custom Title Creation with Approval Process
+1. **Create a New SharePoint List for Custom Titles**
+   - Step 1: Go to your SharePoint site and create a new list called `CustomTitleList`.
+   - Step 2: Add relevant columns such as `TitleName`, `CreatedBy`, `Status`, etc.
+   - Step 3: Set default status as "Pending" for new titles.
+
 
 ---
 
